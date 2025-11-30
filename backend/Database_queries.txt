@@ -1,0 +1,84 @@
+// 1. Clear database 
+MATCH (n) DETACH DELETE n;
+
+// 2. Create Ingredients
+CREATE (eggs:Ingredient {name: "Eggs"})
+CREATE (flour:Ingredient {name: "Flour"})
+CREATE (milk:Ingredient {name: "Milk"})
+CREATE (tomato:Ingredient {name: "Tomato"})
+CREATE (onion:Ingredient {name: "Onion"})
+CREATE (garlic:Ingredient {name: "Garlic"})
+CREATE (pasta:Ingredient {name: "Pasta"})
+CREATE (cheese:Ingredient {name: "Cheese"})
+CREATE (bacon:Ingredient {name: "Bacon"})
+
+// 3. Create Recipes
+CREATE (r1:Recipe {name: "Scrambled Eggs"})
+CREATE (r2:Recipe {name: "Pancakes"})
+CREATE (r3:Recipe {name: "Spaghetti Bolognese"})
+CREATE (r4:Recipe {name: "Carbonara"})
+
+// 4. Create Relationships (CONTAINS)
+// Scrambled Eggs
+CREATE (r1)-[:CONTAINS]->(eggs)
+CREATE (r1)-[:CONTAINS]->(onion)
+CREATE (r1)-[:CONTAINS]->(bacon)
+
+// Pancakes
+CREATE (r2)-[:CONTAINS]->(flour)
+CREATE (r2)-[:CONTAINS]->(milk)
+CREATE (r2)-[:CONTAINS]->(eggs)
+
+// Spaghetti
+CREATE (r3)-[:CONTAINS]->(pasta)
+CREATE (r3)-[:CONTAINS]->(tomato)
+CREATE (r3)-[:CONTAINS]->(onion)
+CREATE (r3)-[:CONTAINS]->(garlic)
+
+// Carbonara
+CREATE (r4)-[:CONTAINS]->(pasta)
+CREATE (r4)-[:CONTAINS]->(eggs)
+CREATE (r4)-[:CONTAINS]->(bacon)
+CREATE (r4)-[:CONTAINS]->(cheese)
+
+// Recipe: Avocado Toast
+MERGE (rt1:Recipe {name: "Avocado Toast"})
+WITH rt1
+UNWIND ["Avocado", "Bread", "Salt", "Chili Flakes"] AS ingredientName
+MERGE (i:Ingredient {name: ingredientName})
+MERGE (rt1)-[:CONTAINS]->(i);
+
+// Recipe: Chicken Salad
+MERGE (rt2:Recipe {name: "Chicken Salad"})
+WITH rt2
+UNWIND ["Chicken", "Mayonnaise", "Celery", "Grapes"] AS ingredientName
+MERGE (i:Ingredient {name: ingredientName})
+MERGE (rt2)-[:CONTAINS]->(i);
+
+// Recipe: Tuna Sandwich
+MERGE (rt3:Recipe {name: "Tuna Sandwich"})
+WITH rt3
+UNWIND ["Tuna", "Bread", "Mayonnaise", "Lettuce"] AS ingredientName
+MERGE (i:Ingredient {name: ingredientName})
+MERGE (rt3)-[:CONTAINS]->(i);
+
+// Recipe: Caprese Salad
+MERGE (rt4:Recipe {name: "Caprese Salad"})
+WITH rt4
+UNWIND ["Tomato", "Mozzarella", "Basil", "Olive Oil"] AS ingredientName
+MERGE (i:Ingredient {name: ingredientName})
+MERGE (rt4)-[:CONTAINS]->(i);
+
+// Recipe: Omelette
+MERGE (rt5:Recipe {name: "Omelette"})
+WITH rt5
+UNWIND ["Eggs", "Cheese", "Milk", "Bell Pepper"] AS ingredientName
+MERGE (i:Ingredient {name: ingredientName})
+MERGE (rt5)-[:CONTAINS]->(i);
+
+// Recipe: Guacamole
+MERGE (rt6:Recipe {name: "Guacamole"})
+WITH rt6
+UNWIND ["Avocado", "Onion", "Garlic", "Lime", "Cilantro"] AS ingredientName
+MERGE (i:Ingredient {name: ingredientName})
+MERGE (rt6)-[:CONTAINS]->(i);

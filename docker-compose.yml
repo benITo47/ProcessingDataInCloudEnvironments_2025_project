@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fridge-helper-backend
+    ports:
+      - "2067:2067"
+    env_file:
+      - ./backend/.env
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fridge-helper-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
